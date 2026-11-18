@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import fs from "fs";
 import path from "path";
 import http from "http";
@@ -15,7 +14,7 @@ import { projectStats, recordDaily, dailySeries } from "./stats.js";
 import { lookupReference, searchReferences, checkBib } from "./bib.js";
 import { zipDirectory } from "./zip.js";
 import { runChktex, quickChecks } from "./lint.js";
-import { checkSpelling, checkGrammar, addToDictionary, ignoredWords } from "./spell.js";
+import { checkSpelling, checkGrammar, addToDictionary, ignoredWords, langCode } from "./spell.js";
 import { writeBackup, listBackups, latestMtime } from "./backup.js";
 import {
   makeLocator,
@@ -60,6 +59,24 @@ import { initHistory, snapshot, listHistory, showFile, diffFile, changedFiles, r
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
+const LOOPBACK = /^(?:127\.0\.0\.1|localhost|\[::1\])(?::\d+)?$/i;
+
+/**
+ * Nur die eigene Oberfläche darf die API benutzen. Fremde Webseiten im Browser
+ * senden eine fremde Origin; DNS-Rebinding fällt über den Host-Header auf.
+ */
+export function isAllowedRequest(req, bindHost) {
+  const host = String(req.headers.host || "");
+  if (LOOPBACK.test(`${bindHost}`) && !LOOPBACK.test(host)) return false;
+  const origin = req.headers.origin;
+  if (origin === undefined) return true;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
 const DEFAULT_SETTINGS = {
   autoCompile: true,
   engine: "auto",
@@ -84,11 +101,14 @@ const DEFAULT_SETTINGS = {
  */
 export function createApp({ port = 3847, host = "127.0.0.1", picker = null, staticDir = null } = {}) {
   const app = express();
-  app.use(cors());
+  app.use((req, res, next) => {
+    if (isAllowedRequest(req, host)) return next();
+    res.status(403).json({ error: "Zugriff nur über die ThesisLeaf-Oberfläche erlaubt" });
+  });
   app.use(express.json({ limit: "80mb" }));
 
   const server = http.createServer(app);
-  const wss = new WebSocketServer({ server, path: "/ws" });
+  const wss = new WebSocketServer({ server, path: "/ws", verifyClient: ({ req }) => isAllowedRequest(req, host) });
 
   const state = {
     projectPath: null,
@@ -395,6 +415,43 @@ export function createApp({ port = 3847, host = "127.0.0.1", picker = null, stat
     return set;
   }
 
+  /**
+   * Kontext der von der Hauptdatei eingebundenen Dateien: in der Präambel
+   * eingebunden (keine Prosa) und Sprache an der Einbindestelle (otherlanguage).
+   */
+  function includeContexts(root, mainFile, defaultLang) {
+    const ctx = new Map();
+    if (!mainFile) return ctx;
+    let text;
+    try {
+      text = fs.readFileSync(path.resolve(root, mainFile), "utf8");
+    } catch {
+      return ctx;
+    }
+    const base = path.posix.dirname(mainFile.replace(/\\/g, "/"));
+    let inBody = false;
+    let current = defaultLang;
+    const stack = [];
+    for (const raw of text.split(/\r?\n/)) {
+      const line = raw.replace(/(^|[^\\])%.*$/, "$1");
+      if (/\\begin\{document\}/.test(line)) inBody = true;
+      const begin = line.match(/\\begin\{otherlanguage\*?\}\{([^}]+)\}/);
+      if (begin) {
+        stack.push(current);
+        current = langCode(begin[1]) || current;
+      }
+      const sel = line.match(/\\selectlanguage\{([^}]+)\}/);
+      if (sel) current = langCode(sel[1]) || current;
+      for (const m of line.matchAll(/\\(?:input|include|subfile)\s*\{([^}]+)\}/g)) {
+        let p = m[1].trim().replace(/\\/g, "/");
+        if (!/\.[a-z]+$/i.test(p)) p += ".tex";
+        ctx.set(path.posix.normalize(base === "." ? p : `${base}/${p}`), { preamble: !inBody, language: current });
+      }
+      if (/\\end\{otherlanguage\*?\}/.test(line)) current = stack.pop() || defaultLang;
+    }
+    return ctx;
+  }
+
   async function runLint(files) {
     if (!state.projectPath) return;
     if (state.lintRunning) {
@@ -423,7 +480,10 @@ export function createApp({ port = 3847, host = "127.0.0.1", picker = null, stat
         // Titelseiten/Erklärungen (Vorlagen-Boilerplate mit Eigennamen) nicht auf Rechtschreibung prüfen
         const isBoilerplate = (f) => /(^|\/)(front|title|titel|titelseite|erkl(ae|ä)rung|declaration|sperrvermerk)[^/]*\.tex$/i.test(f);
         const spellTargets = [...texTargets.filter((f) => !isBoilerplate(f)), ...(state.settings.spell.markdown ? mdTargets : [])];
+        const contexts = includeContexts(root, state.mainFile, language);
         for (const rel of spellTargets) {
+          const context = contexts.get(rel);
+          if (context?.preamble) continue;
           let text;
           try {
             text = fs.readFileSync(path.resolve(root, rel), "utf8");
@@ -432,7 +492,7 @@ export function createApp({ port = 3847, host = "127.0.0.1", picker = null, stat
           }
           if (text.length > 600000) continue;
           const kind = /\.md$/i.test(rel) ? "markdown" : "latex";
-          const found = await checkSpelling(text, { kind, language, ignore });
+          const found = await checkSpelling(text, { kind, language: context?.language || language, ignore });
           for (const it of found) items.push({ ...it, file: rel });
         }
       }

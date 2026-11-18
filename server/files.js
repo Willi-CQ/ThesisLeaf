@@ -845,6 +845,12 @@ export function extractMeta(root, mainFile = null, exclude = []) {
     for (const m of clean.matchAll(/\\label\s*\{([^}]+)\}/g)) {
       labels.push({ key: m[1].trim(), file: rel, line: lineOf(clean, m.index), inDocument });
     }
+    // Listings vergeben Labels als Option: \lstinputlisting[label={lst:x}]{…}, \begin{lstlisting}[label=lst:x]
+    for (const m of clean.matchAll(/\\(?:begin\{lstlisting\}|lstinputlisting)\s*\[([^\]]*)\]/g)) {
+      const lab = m[1].match(/(?:^|,)\s*label\s*=\s*(?:\{([^}]*)\}|([^,]+))/);
+      const key = (lab?.[1] ?? lab?.[2] ?? "").trim();
+      if (key) labels.push({ key, file: rel, line: lineOf(clean, m.index), inDocument });
+    }
     for (const m of clean.matchAll(/\\(?:cite\w*|parencite|textcite|autocite|footcite|fullcite|nocite)\*?\s*(?:\[[^\]]*\]\s*)*\{([^}]+)\}/g)) {
       const line = lineOf(clean, m.index);
       for (const k of m[1].split(",")) {
@@ -1133,7 +1139,8 @@ function latexEscape(value) {
 }
 
 export function copyTemplate(targetDir, vars = {}) {
-  if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).length > 0) {
+  // Ein bereits als Projekt geöffneter, sonst leerer Ordner enthält nur .local-overleaf
+  if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).some((n) => n !== ".local-overleaf" && !ALWAYS_HIDDEN_FILES.has(n))) {
     throw new Error("Zielordner ist nicht leer");
   }
   fs.cpSync(TEMPLATE_DIR, targetDir, {
