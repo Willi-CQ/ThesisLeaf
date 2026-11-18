@@ -1,0 +1,71 @@
+% !TeX program = pdflatex
+% !BIB program = biber
+% =====================================================================
+%  Bachelorarbeit – Hauptdatei
+%  Persönliche Angaben:  meta.tex
+%  Pakete & Layout:      einstellungen.tex
+%  Kapitel:              kapitel/*.tex  (hier per \input eingebunden)
+%  Literatur:            literatur.bib  (biblatex + biber)
+% =====================================================================
+\documentclass[
+  12pt,                 % Schriftgröße
+  a4paper,
+  oneside,              % einseitig (für zweiseitigen Druck: twoside)
+  open=any,
+  chapterprefix=false,  % true: "Kapitel 1" über der Überschrift
+  headings=normal,
+  parskip=half,         % Absätze durch halben Zeilenabstand statt Einzug
+  listof=totoc,         % Abbildungs-/Tabellenverzeichnis im Inhaltsverzeichnis
+  bibliography=totoc,   % Literaturverzeichnis im Inhaltsverzeichnis
+  numbers=noenddot,
+]{scrreprt}
+
+\input{meta}
+\input{einstellungen}
+\addbibresource{literatur.bib}
+
+\begin{document}
+
+% ---------- Vorspann (römische Seitenzahlen) ----------
+\pagenumbering{roman}
+\input{titelseite}
+% \input{sperrvermerk}   % nur bei Arbeiten mit vertraulichen Firmendaten
+
+\chapter*{Kurzfassung}
+\addcontentsline{toc}{chapter}{Kurzfassung}
+\input{kapitel/00-kurzfassung}
+
+\begin{otherlanguage}{english}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\input{kapitel/00-abstract}
+\end{otherlanguage}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+\input{abkuerzungen}
+
+% ---------- Hauptteil (arabische Seitenzahlen) ----------
+\clearpage
+\pagenumbering{arabic}
+
+\input{kapitel/01-einleitung}
+\input{kapitel/02-grundlagen}
+\input{kapitel/03-methodik}
+\input{kapitel/04-umsetzung}
+\input{kapitel/05-evaluation}
+\input{kapitel/06-fazit}
+
+% ---------- Verzeichnisse & Anhang ----------
+\printbibliography[heading=bibintoc,title={Literaturverzeichnis}]
+
+\appendix
+\input{kapitel/anhang}
+
+% \listoftodos   % Übersicht aller offenen \todo-Notizen (vor der Abgabe entfernen)
+
+\input{erklaerung}
+
+\end{document}

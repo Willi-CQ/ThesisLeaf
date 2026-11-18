@@ -1,0 +1,57 @@
+\chapter{Grundlagen und Stand der Technik}
+\label{cha:grundlagen}
+
+% Hier werden Begriffe definiert, die später gebraucht werden, und der aktuelle
+% Forschungs-/Technikstand mit Quellen dargestellt. Nur das aufnehmen, was für
+% Konzept, Umsetzung oder Evaluation tatsächlich benötigt wird.
+% Richtwert: 20–30 % des Umfangs. Jeder Absatz mit Fremdwissen braucht ein Zitat.
+
+\section{Begriffsdefinitionen}
+\label{sec:begriffe}
+
+% Abkürzungen mit \ac{…} einführen – beim ersten Vorkommen wird die Langform
+% automatisch ausgeschrieben.
+Eine \ac{API} beschreibt die Schnittstelle, über die Programme miteinander
+kommunizieren~\cite{kopka2003guide}. Im Kontext dieser Arbeit wird unter \ldots{}
+verstanden, dass \ldots
+
+\section{Theoretische Grundlagen}
+\label{sec:theorie}
+
+% Modelle, Verfahren, Formeln. Gleichungen nummerieren und im Text referenzieren.
+Die Laufzeit des Verfahrens lässt sich durch Gleichung~\eqref{eq:laufzeit}
+abschätzen:
+\begin{equation}
+  T(n) = a \cdot n \log n + b
+  \label{eq:laufzeit}
+\end{equation}
+Dabei bezeichnet $n$ die Eingabegröße und $a$, $b$ sind konstante Faktoren.
+
+\section{Verwandte Arbeiten}
+\label{sec:verwandte-arbeiten}
+
+% Wer hat ähnliche Probleme wie gelöst? Was ist die Lücke, die diese Arbeit
+% schließt? Ein Vergleich in Tabellenform ist hier oft hilfreich.
+\textcite{knuth1984literate} beschreibt mit \emph{Literate Programming} einen Ansatz,
+Quelltext und Dokumentation zu verbinden. Tabelle~\ref{tab:verwandte} stellt die
+betrachteten Ansätze gegenüber.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Vergleich verwandter Ansätze}
+  \label{tab:verwandte}
+  \begin{tabular}{lccc}
+    \toprule
+    Ansatz & Lokal & Versionierung & Offen \\
+    \midrule
+    Webbasierter Editor & -- & \checkmark & -- \\
+    Lokale IDE mit Plugin & \checkmark & (\checkmark) & \checkmark \\
+    Diese Arbeit & \checkmark & \checkmark & \checkmark \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Zusammenfassung}
+% Kurz: Was folgt aus den Grundlagen für die eigene Arbeit?
+Aus den betrachteten Arbeiten folgt, dass \ldots{} Diese Lücke adressiert das in
+Kapitel~\ref{cha:umsetzung} vorgestellte Konzept.

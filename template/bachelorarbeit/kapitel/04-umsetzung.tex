@@ -1,0 +1,47 @@
+\chapter{Konzept und Umsetzung}
+\label{cha:umsetzung}
+
+% Erst das Konzept (Architektur, Entwurfsentscheidungen, Alternativen), dann die
+% Implementierung (Technologien, zentrale Komponenten, interessante Details).
+% Kein Code-Abdruck ganzer Dateien – nur aussagekräftige Ausschnitte mit Erklärung.
+
+\section{Architektur}
+\label{sec:architektur}
+
+Abbildung~\ref{fig:architektur} zeigt die Komponenten des Systems und ihre
+Schnittstellen. Die Trennung in \ldots{} und \ldots{} erlaubt \ldots
+
+\begin{figure}[htbp]
+  \centering
+  \missingfigure{Architekturdiagramm einfügen (abbildungen/architektur.png)}
+  \caption{Systemarchitektur}
+  \label{fig:architektur}
+\end{figure}
+
+\section{Entwurfsentscheidungen}
+\label{sec:entwurf}
+
+% Für jede wichtige Entscheidung: Alternativen, Kriterien, Begründung.
+Für die Datenhaltung wurden zwei Alternativen betrachtet: \ldots{} Gewählt wurde
+\ldots, weil \ldots
+
+\section{Implementierung}
+\label{sec:implementierung}
+
+Die Umsetzung erfolgte in \ldots{} Listing~\ref{lst:beispiel} zeigt die zentrale
+Funktion zur \ldots
+
+% Variante 1: Code direkt aus einer Datei einbinden (bleibt automatisch aktuell)
+\lstinputlisting[language=Python, caption={Zentrale Verarbeitungsfunktion}, label={lst:beispiel}, firstline=1, lastline=20]{code/beispiel.py}
+
+% Variante 2: Code im Text
+\begin{lstlisting}[language=Python, caption={Aufruf der Funktion}, label={lst:aufruf}]
+ergebnis = verarbeite(daten, schwellwert=0.5)
+print(ergebnis)
+\end{lstlisting}
+
+\section{Herausforderungen}
+\label{sec:herausforderungen}
+
+% Was war schwierig und wie wurde es gelöst? Das zeigt Reflexionsfähigkeit.
+Eine besondere Herausforderung stellte \ldots{} dar. \todo{Beispiel ergänzen}

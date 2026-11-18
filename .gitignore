@@ -1,0 +1,21 @@
+# Abhängigkeiten und Build-Ausgaben
+node_modules/
+dist/
+release/
+*.exe
+
+# Lokale Laufzeitdaten (können Nutzerpfade enthalten)
+.local-overleaf/
+.ruff_cache/
+.env
+.env.*
+*.log
+
+# System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Screenshots können Uni-Mail und Matrikelnummer enthalten
+docs/screenshots/

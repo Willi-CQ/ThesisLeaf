@@ -1,0 +1,69 @@
+\chapter{Methodisches Vorgehen und Anforderungen}
+\label{cha:methodik}
+
+% Wie wurde gearbeitet (Vorgehensmodell, Erhebung, Werkzeuge) und was muss die
+% Lösung leisten? Anforderungen nummerieren, damit sie in der Evaluation
+% wieder aufgegriffen werden können.
+
+\section{Vorgehensmodell}
+\label{sec:vorgehen}
+
+Die Arbeit folgt einem iterativen Vorgehen aus Anforderungsanalyse, Entwurf,
+Implementierung und Evaluation (\vgl Abbildung~\ref{fig:vorgehen}).
+
+\begin{figure}[htbp]
+  \centering
+  % \includegraphics[width=0.8\textwidth]{vorgehen}
+  \fbox{\parbox{0.78\textwidth}{\centering\vspace{1.4cm}Platzhalter: Vorgehensmodell als Grafik (abbildungen/vorgehen.png)\vspace{1.4cm}}}
+  \caption{Iteratives Vorgehen der Arbeit}
+  \label{fig:vorgehen}
+\end{figure}
+
+\section{Anforderungen}
+\label{sec:anforderungen}
+
+% Funktionale Anforderungen (was das System tun soll) und nicht-funktionale
+% Anforderungen (wie gut: Leistung, Usability, Sicherheit …).
+% Priorität: M = Muss, S = Soll, K = Kann.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Funktionale Anforderungen}
+  \label{tab:anforderungen-funktional}
+  \begin{tabularx}{\textwidth}{lXc}
+    \toprule
+    Nr. & Anforderung & Prio \\
+    \midrule
+    FA1 & Ein bestehender Projektordner lässt sich öffnen und durchsuchen. & M \\
+    FA2 & Änderungen werden automatisch kompiliert und als PDF angezeigt. & M \\
+    FA3 & Jede Version bleibt über eine Historie wiederherstellbar. & S \\
+    FA4 & Literaturangaben lassen sich per DOI importieren. & K \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Nicht-funktionale Anforderungen}
+  \label{tab:anforderungen-nichtfunktional}
+  \begin{tabularx}{\textwidth}{lXc}
+    \toprule
+    Nr. & Anforderung & Prio \\
+    \midrule
+    NFA1 & Die Kompilierung unterbricht den Schreibfluss nicht (asynchron). & M \\
+    NFA2 & Alle Daten bleiben lokal auf dem Rechner. & M \\
+    NFA3 & Die Anwendung startet in unter fünf Sekunden. & S \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Bewertungskriterien}
+\label{sec:kriterien}
+
+% Woran wird der Erfolg gemessen? Diese Kriterien strukturieren Kapitel 5.
+Die Lösung wird anhand folgender Kriterien bewertet:
+\begin{description}
+  \item[Funktionalität] Erfüllungsgrad der Anforderungen aus Tabelle~\ref{tab:anforderungen-funktional}.
+  \item[Leistung] Dauer einer Kompilierung und Reaktionszeit der Oberfläche.
+  \item[Nutzbarkeit] Ergebnisse einer Nutzerbefragung (\zB System Usability Scale).
+\end{description}

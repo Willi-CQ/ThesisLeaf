@@ -1,0 +1,40 @@
+% Titelseite – Angaben kommen aus meta.tex. Layout bei Bedarf an die
+% Vorgaben der Hochschule anpassen (Logo: \includegraphics[width=4cm]{logo}).
+\begin{titlepage}
+  \centering
+  \thispagestyle{empty}
+
+  {\large \arbeitHochschule\par}
+  \vspace{0.3cm}
+  {\large \arbeitFakultaet\par}
+  % \vspace{1cm}\includegraphics[width=4cm]{logo}\par
+
+  \vspace{3cm}
+  {\Large\scshape \arbeitArt\par}
+  \vspace{1cm}
+  {\huge\bfseries \arbeitTitel\par}
+  \ifx\arbeitUntertitel\empty\else
+    \vspace{0.5cm}
+    {\Large \arbeitUntertitel\par}
+  \fi
+
+  \vfill
+
+  {\large vorgelegt von\par}
+  \vspace{0.3cm}
+  {\Large\bfseries \arbeitAutor\par}
+  \vspace{0.2cm}
+  {Matrikelnummer \arbeitMatrikel\par}
+  {Studiengang \arbeitStudiengang\par}
+
+  \vspace{1.5cm}
+  \begin{tabular}{rl}
+    Erstprüfer:in:  & \arbeitErstpruefer \\
+    Zweitprüfer:in: & \arbeitZweitpruefer \\
+    Abgabedatum:    & \arbeitAbgabe \\
+  \end{tabular}
+
+  \vspace{1cm}
+  {\arbeitOrt, \arbeitAbgabe\par}
+\end{titlepage}
+\clearpage

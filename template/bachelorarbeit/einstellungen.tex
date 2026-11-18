@@ -1,0 +1,110 @@
+% =====================================================================
+%  Pakete und Layout – für pdflatex. Reihenfolge ist teilweise wichtig:
+%  hyperref (fast) zuletzt, cleveref/bookmark danach.
+% =====================================================================
+
+% ---------- Zeichensatz & Sprache ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,\arbeitSprache]{babel}   % letzte Sprache = Hauptsprache
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[autostyle=true,german=quotes]{csquotes}  % \enquote{…} → „…“
+
+% ---------- Seitenlayout ----------
+\usepackage[left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm,headsep=0.8cm,marginparwidth=2.1cm,marginparsep=0.25cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[automark,headsepline]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ihead{\leftmark}
+\ohead{\pagemark}
+\pagestyle{scrheadings}
+\setcounter{secnumdepth}{3}   % bis \subsubsection nummerieren
+\setcounter{tocdepth}{2}      % Inhaltsverzeichnis bis \subsection
+
+% ---------- Mathematik ----------
+\usepackage{amsmath,amssymb}
+
+% ---------- Abbildungen & Tabellen ----------
+\usepackage{graphicx}
+\graphicspath{{abbildungen/}}
+\usepackage{float}
+\usepackage[font=small,labelfont=bf,margin=0.5cm]{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{placeins}          % \FloatBarrier: Gleitobjekte vor dem nächsten Abschnitt ausgeben
+\usepackage{pdfpages}          % \includepdf für Anhänge (Fragebögen, Datenblätter)
+
+% ---------- Listen & Textbausteine ----------
+\usepackage{enumitem}
+\setlist{nosep}
+\usepackage{url}
+\usepackage{xspace}
+
+% ---------- Quellcode ----------
+\usepackage{listings}
+\definecolor{codebg}{RGB}{247,249,248}
+\definecolor{codekw}{RGB}{15,111,43}
+\definecolor{codecomment}{RGB}{120,130,125}
+\definecolor{codestring}{RGB}{11,110,153}
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  backgroundcolor=\color{codebg},
+  numbers=left, numberstyle=\tiny\color{codecomment}, numbersep=8pt,
+  frame=single, framerule=0.3pt, rulecolor=\color{gray!40},
+  breaklines=true, breakatwhitespace=true,
+  showstringspaces=false, tabsize=2, captionpos=b,
+  inputencoding=utf8, extendedchars=true,
+  literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {ß}{{\ss}}1 {–}{{--}}1 {„}{{,,}}1 {“}{{''}}1,
+}
+\renewcommand{\lstlistingname}{Listing}
+\renewcommand{\lstlistlistingname}{Listingverzeichnis}
+
+% ---------- Abkürzungen ----------
+% \ac{KEY} beim ersten Vorkommen ausgeschrieben, danach nur die Abkürzung.
+% Liste in abkuerzungen.tex pflegen.
+\usepackage[printonlyused]{acronym}
+
+% ---------- Notizen während des Schreibens ----------
+% \todo{…} am Rand, \todo[inline]{…} im Text, \missingfigure{…} als Platzhalter.
+% Vor der Abgabe: Option "disable" setzen → \usepackage[disable]{todonotes}
+\usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
+
+% ---------- Literatur ----------
+\usepackage[
+  backend=biber,
+  style=\arbeitZitierstil,
+  maxbibnames=99,
+  maxcitenames=2,
+  doi=true, isbn=false, url=true,
+  date=year,
+]{biblatex}
+\DefineBibliographyStrings{ngerman}{andothers={et\,al\adddot}}
+
+% ---------- Verweise (immer zuletzt) ----------
+\usepackage[
+  colorlinks=true,
+  linkcolor=black, citecolor=black, urlcolor=blue!50!black,
+  pdftitle={\arbeitTitel},
+  pdfauthor={\arbeitAutor},
+  pdfsubject={\arbeitArt},
+  bookmarksnumbered=true,
+  pdfstartview=FitH,
+]{hyperref}
+\usepackage{bookmark}
+
+% ---------- Eigene Befehle ----------
+\newcommand{\zB}{z.\,B.\xspace}
+\newcommand{\dasheisst}{d.\,h.\xspace}   % (\dh ist in T1 bereits der Buchstabe ð)
+\newcommand{\bzw}{bzw.\xspace}
+\newcommand{\vgl}{vgl.\xspace}
+\newcommand{\code}[1]{\texttt{#1}}
